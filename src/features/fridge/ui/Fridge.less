@@ -1,0 +1,110 @@
+.door {
+  position: relative;
+  width: 400px;
+  height: 800px;
+  background-color: #e0e0e0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.handle {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 20px;
+  background-color: #777;
+  border-radius: 5px;
+}
+
+.handle:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background-color: #fff;
+  border: 1px solid #777;
+  border-radius: 50%;
+}
+
+.handle:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 70%;
+  background-color: #777;
+}
+
+.fridge {
+  position: relative;
+  width: 360px;
+  height: 720px;
+  background-color: #d0d0d0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: 20px auto;
+  cursor: pointer;
+}
+
+.light {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 15px 5px #fff, 0 0 20px #fff;
+}
+
+// .shadow {
+//   position: absolute;
+//   bottom: -80px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   width: 120px;
+//   height: 20px;
+//   background: radial-gradient(circle at center, #0000 0%, #000 80%);
+//   border-radius: 50%;
+// }
+
+.tooltip {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 50px;
+  background-color: transparent;
+}
+
+.tooltip-text {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  padding: 5px;
+  background-color: rgba(26, 4, 4, 0.884);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.tooltip-text.visible {
+  opacity: 1;
+  visibility: visible;
+  color: #777;
+}
