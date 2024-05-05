@@ -1,0 +1,31 @@
+.todo-card {
+  background-color: #fffacd; // Светло-лимонный цвет фона
+  border: none; // Убираем границы
+  border-radius: 10px; // Закругляем углы
+  position: relative; // Позиционируем для даты
+  font-size: 0.8rem;
+  .card-body {
+    padding: 1rem; // Отступы внутри карточки
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; // Рукописный шрифт
+    text-align: center; // Центрируем текст
+    font-size: .6rem; // Размер шрифта заголовка
+    overflow-y: hidden;; // Обрезаем длинные строки
+  }
+
+  .details {
+    font-size: 0.4rem; // Размер шрифта для дат
+    position: absolute; // Позиционируем даты
+    top: 0; // Отступ сверху
+    right: 0; // Отступ справа
+    padding: 0.2rem 0.5rem; // Внутренние отступы
+    
+  }
+
+  .created-at {
+    color: #6c757d; // Цвет текста для даты создания
+  }
+
+  .updated-at {
+    color: #6c757d; // Цвет текста для даты обновления
+  }
+}

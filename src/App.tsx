@@ -1,92 +1,58 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import { 
-  // Accordion, 
-  // Button, 
-  // Modal, 
-  // Form 
-} from 'react-bootstrap';
-// import React, {  useState } from 'react';
-// import todoList from './shared/data/todoList';
 import Fridge from './features/fridge/ui';
 import Header from './features/header/ui';
+import TodoItem from './features/todoItem/ui';
+import TodoList from './features/todoList/ui';
+import { Button } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { Todo } from './types/types';
+import AddTodoModal from './features/addTodoModal/ui';
 
+
+import note from './assets/note.png';
 const App: React.FC = () => {
-  // const [showModal, setShowModal] = useState(false);
-  // const [title, setTitle] = useState('');
-  // const [description, setDescription] = useState('');
 
-  // const handleCloseModal = () => setShowModal(false);
-  // const handleShowModal = () => setShowModal(true);
+  const [showModal, setShowModal] = useState(false);
+  const [todoList, setTodoList] = useState<Todo[]>([]);
 
-  // const handleAddTodo = () => {
-  //   // Здесь можно добавить логику для сохранения todo
-  //   console.log('Добавлено:', { title, description });
-  //   setTitle('');
-  //   setDescription('');
-  //   handleCloseModal();
-  // };
+  const handleCloseModal = () => setShowModal(false);
+  const handleShowModal = () => setShowModal(true);
+  const handleSaveTodo = (newTodo: Todo) => {
+    const updatedTodoList = [...todoList, newTodo];
+    setTodoList(updatedTodoList);
+    localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+  };
 
+  // Загрузка todoList из localStorage при загрузке компонента
+  useEffect(() => {
+    const storedTodoList = localStorage.getItem('todoList');
+    if (storedTodoList) {
+      setTodoList(JSON.parse(storedTodoList));
+    }
+  }, []);
   return (
     <div>
       <Header/>
-      <Fridge/>
+      <Fridge children={
+       <>
+        <Button variant='link' as='a' onClick={handleShowModal} className='position-relative '>
+          <span className="rope"></span> {/* Веревочка */}
+          <img src={note} alt="Добавить задачу" />
+        </Button>
+          <TodoList>
+          {
+                  todoList.map((item) => 
+                    <TodoItem todo={item} key={item.id}/>
+                  )
+          }
+        </TodoList> 
+       
 
-      {/* <Button variant="primary absolute" onClick={handleShowModal}>Добавить</Button>
-      <Button variant="danger absolute">Удалить</Button> */}
-
-      {/* <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Добавить Todo</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
-              <Form.Control type="text" value={title} onChange={e => setTitle(e.target.value)} />
-            </Form.Group>
-            <Form.Group controlId="description">
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" value={description} onChange={e => setDescription(e.target.value)} />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Закрыть
-          </Button>
-          <Button variant="primary" onClick={handleAddTodo}>
-            Добавить
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Accordion defaultActiveKey="0" flush>
-        {
-          todoList.map((item) => 
-              <Accordion.Item eventKey={item.id} key={item.id}>
-                <Accordion.Header>
-                  <p>{item.title}</p>
-                  <p className="text-muted">{item.createdAt.toLocaleDateString('ru-RU', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </p>
-                </Accordion.Header>
-                <Accordion.Body>
-                  <p>{item.description}</p>
-                  <p className="text-muted">{item.updatedAt.toLocaleDateString('ru-RU', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit',
-                    })}
-                  </p>
-                </Accordion.Body>
-              </Accordion.Item>
-          )
-        }
-      </Accordion> */}
+      <AddTodoModal show={showModal} onClose={handleCloseModal} onSave={handleSaveTodo} />
+       </>
+      }/>
+           
+            
     </div>
   );
 };

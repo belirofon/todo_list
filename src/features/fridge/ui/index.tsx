@@ -1,26 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Fridge.less'; // Подключаем стили
 
-const Fridge: React.FC = () => {
-  const [showTooltip, setShowTooltip] = useState(false);
+type Props = {
+  children: React.ReactNode;
+};
 
-  const handleTooltipToggle = () => {
-    setShowTooltip(!showTooltip);
-  };
+const Fridge: React.FC<Props> = ({ children }) => {
+
 
   return (
     <div className="fridge">
+      
       <div className="door">
+      <p className='mt-3 mb-2 text-center'>БИРЮСА</p>
+        {children}
         <div className="handle"></div>
-        <div
-          className="tooltip"
-          onMouseEnter={handleTooltipToggle}
-          onMouseLeave={handleTooltipToggle}
-        >
-          <span className={`tooltip-text ${showTooltip ? 'visible' : ''}`}>
-            Добавить новую заметку
-          </span>
-        </div>
       </div>
       <div className="light"></div>
       <div className="shadow"></div>
