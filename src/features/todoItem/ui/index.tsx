@@ -3,16 +3,17 @@ import { Card } from 'react-bootstrap';
 import { Todo } from '../../../types/types';
 import './TodoItem.less';
 
-interface TodoItemProps {
+interface TodoItemProps{
   todo: Todo;
+  onClick: () => void;
 }
 
-const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {
+const TodoItem: React.FC<TodoItemProps > = ({ todo, onClick }) => {
     // Преобразуем строки в объекты Date
     const createdAt = new Date(todo.createdAt);
     const updatedAt = new Date(todo.updatedAt);
   return (
-    <Card className="todo-card p-2">
+    <Card className="todo-card p-2" onClick={onClick}>
         <div className="details">
         <span className="created-at">Created: {createdAt.toLocaleDateString('ru-RU', {
                   year: 'numeric',

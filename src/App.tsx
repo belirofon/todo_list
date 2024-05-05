@@ -14,14 +14,33 @@ const App: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [todoList, setTodoList] = useState<Todo[]>([]);
-
-  const handleCloseModal = () => setShowModal(false);
-  const handleShowModal = () => setShowModal(true);
+  const [todoId, setTodoId] = useState<string | undefined>(undefined);
+  // const handleCloseModal = () => setShowModal(false);
+  // const handleShowModal = () => setShowModal(true);
   const handleSaveTodo = (newTodo: Todo) => {
-    const updatedTodoList = [...todoList, newTodo];
-    setTodoList(updatedTodoList);
-    localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+    const existingTodoIndex = todoList.findIndex((todo) => todo.id === newTodo.id);
+  
+    if (existingTodoIndex !== -1) {
+      // Если уже существует todoItem с таким id, обновляем его
+      const updatedTodoList = todoList.map((todo, index) => (index === existingTodoIndex ? newTodo : todo));
+      setTodoList(updatedTodoList);
+      localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+    } else {
+      // Если не существует, добавляем новый todoItem
+      const updatedTodoList = [...todoList, newTodo];
+      setTodoList(updatedTodoList);
+      localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+    }
   };
+  
+  const toggleModal = () => {
+    
+    setShowModal(!showModal);
+  }
+  const getItemId = (id: string | undefined) => {
+    setTodoId(id);
+    toggleModal();
+  }
 
   // Загрузка todoList из localStorage при загрузке компонента
   useEffect(() => {
@@ -35,20 +54,20 @@ const App: React.FC = () => {
       <Header/>
       <Fridge children={
        <>
-        <Button variant='link' as='a' onClick={handleShowModal} className='position-relative '>
-          <span className="rope"></span> {/* Веревочка */}
+        <Button variant='link' as='a' onClick={() => getItemId(undefined)} className='position-relative '>
+          <span className="rope"></span>
           <img src={note} alt="Добавить задачу" />
         </Button>
           <TodoList>
           {
                   todoList.map((item) => 
-                    <TodoItem todo={item} key={item.id}/>
+                      <TodoItem todo={item} key={item.id} onClick={() => getItemId(item.id)}/>
                   )
           }
         </TodoList> 
        
 
-      <AddTodoModal show={showModal} onClose={handleCloseModal} onSave={handleSaveTodo} />
+        <AddTodoModal show={showModal} onClose={toggleModal} onSave={handleSaveTodo} id={todoId}/>
        </>
       }/>
            
