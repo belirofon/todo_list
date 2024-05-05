@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { Todo } from '../../../types/types';
+import { Todo } from '../../../shared/types/types';
 
 type AddTodoModalProps = {
   show: boolean;

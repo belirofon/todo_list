@@ -3,20 +3,19 @@ import Fridge from './features/fridge/ui';
 import Header from './features/header/ui';
 import TodoItem from './features/todoItem/ui';
 import TodoList from './features/todoList/ui';
-import { Button } from 'react-bootstrap';
+import { Button, Tab, Tabs } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
-import { Todo } from './types/types';
+import { Todo } from './shared/types/types';
 import AddTodoModal from './features/addTodoModal/ui';
 
-
 import note from './assets/note.png';
+// import TabsTodoLinks from './features/tabs/ui';
 const App: React.FC = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState<string | undefined>(undefined);
-  // const handleCloseModal = () => setShowModal(false);
-  // const handleShowModal = () => setShowModal(true);
+  const [activeTab, setActiveTab] = useState<string>('name'); // Текущая активная вкладка
   const handleSaveTodo = (newTodo: Todo) => {
     const existingTodoIndex = todoList.findIndex((todo) => todo.id === newTodo.id);
   
@@ -32,7 +31,11 @@ const App: React.FC = () => {
       localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
     }
   };
-  
+  const handleDelete = (id: string) => {
+    const updatedTodoList = todoList.filter(todo => todo.id !== id);
+    setTodoList(updatedTodoList);
+    localStorage.setItem('todoList', JSON.stringify(updatedTodoList));
+  };
   const toggleModal = () => {
     
     setShowModal(!showModal);
@@ -40,6 +43,7 @@ const App: React.FC = () => {
   const getItemId = (id: string | undefined) => {
     setTodoId(id);
     toggleModal();
+    
   }
 
   // Загрузка todoList из localStorage при загрузке компонента
@@ -49,6 +53,24 @@ const App: React.FC = () => {
       setTodoList(JSON.parse(storedTodoList));
     }
   }, []);
+  // Функция для обработки смены активной вкладки
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
+
+  // Функция для получения правильной сортировки в зависимости от выбранной вкладки
+  const getSortedTodoList = () => {
+    switch (activeTab) {
+      case 'name':
+        return [...todoList].sort((a, b) => a.title.localeCompare(b.title));
+      case 'createdAt':
+        return [...todoList].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      case 'updatedAt':
+        return [...todoList].sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+      default:
+        return todoList;
+    }
+  };
   return (
     <div>
       <Header/>
@@ -58,13 +80,38 @@ const App: React.FC = () => {
           <span className="rope"></span>
           <img src={note} alt="Добавить задачу" />
         </Button>
-          <TodoList>
+            <Tabs className='tabs' justify activeKey={activeTab} onSelect={(key) => handleTabChange(key as string)}>
+                <Tab eventKey="name" title="По названию">
+                   <TodoList>
+                      {getSortedTodoList().map((item) => (
+                        <TodoItem key={item.id} todo={item} onClick={() => getItemId(item.id)} handleDelete={() => handleDelete(item.id)} />
+                      ))}
+                   </TodoList>
+                </Tab>
+                <Tab eventKey="createdAt" title="По созданию">
+                    <TodoList>
+                      {getSortedTodoList().map((item) => (
+                        <TodoItem key={item.id} todo={item} onClick={() => getItemId(item.id)} handleDelete={() => handleDelete(item.id)} />
+                      ))}
+                    </TodoList>
+                </Tab>
+                <Tab eventKey="updatedAt" title="По обновлению">
+                   <TodoList>
+                      {getSortedTodoList().map((item) => (
+                        <TodoItem key={item.id} todo={item} onClick={() => getItemId(item.id)} handleDelete={() => handleDelete(item.id)} />
+                      ))}
+                   </TodoList>
+                </Tab>
+            </Tabs>
+        {/* <TabsTodoLinks todoList={[]} handleSortChange={function (sortType: string): void {
+              throw new Error('Function not implemented.');
+            } } />
+            
           {
                   todoList.map((item) => 
-                      <TodoItem todo={item} key={item.id} onClick={() => getItemId(item.id)}/>
+                      <TodoItem todo={item} key={item.id} onClick={() => getItemId(item.id)} handleDelete={() => handleDelete(item.id)}/>
                   )
-          }
-        </TodoList> 
+          } */}
        
 
         <AddTodoModal show={showModal} onClose={toggleModal} onSave={handleSaveTodo} id={todoId}/>

@@ -24,3 +24,8 @@
   background-color: #555; /* Цвет "узла" */
   content: ""; /* Важно для псевдоэлемента */
 }
+
+.tabs {
+  font-size: 10px !important;
+  margin-top: -2px;
+}

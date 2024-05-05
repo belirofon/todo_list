@@ -29,3 +29,30 @@
     color: #6c757d; // Цвет текста для даты обновления
   }
 }
+
+.del {
+  position: absolute; /* Позиционируем элемент абсолютно */
+  top: 0; /* Располагаем его сверху */
+  left: 0; /* Располагаем его слева */
+  margin: 5px; /* Отступы */
+  width: 20px; /* Ширина крестика */
+  height: 20px; /* Высота крестика */
+  cursor: pointer; /* Показываем, что это интерактивный элемент */
+}
+
+.del:before,
+.del:after {
+  content: ''; /* Создаем пустой контент */
+  position: absolute; /* Позиционируем */
+  width: 1px; /* Толщина черт */
+  height: 10px; /* Высота черт */
+  background-color: red; /* Цвет крестика */
+}
+
+.del:before {
+  transform: rotate(45deg); /* Поворот первой черты */
+}
+
+.del:after {
+  transform: rotate(-45deg); /* Поворот второй черты */
+}

@@ -1,19 +1,21 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import { Todo } from '../../../types/types';
+import { Todo } from '../../../shared/types/types';
 import './TodoItem.less';
 
 interface TodoItemProps{
   todo: Todo;
   onClick: () => void;
+  handleDelete: () => void;
 }
 
-const TodoItem: React.FC<TodoItemProps > = ({ todo, onClick }) => {
+const TodoItem: React.FC<TodoItemProps > = ({ todo, onClick, handleDelete }) => {
     // Преобразуем строки в объекты Date
     const createdAt = new Date(todo.createdAt);
     const updatedAt = new Date(todo.updatedAt);
   return (
-    <Card className="todo-card p-2" onClick={onClick}>
+    <Card className="todo-card p-2">
+      <span className='del' onClick={handleDelete}></span>
         <div className="details">
         <span className="created-at">Created: {createdAt.toLocaleDateString('ru-RU', {
                   year: 'numeric',
@@ -27,13 +29,11 @@ const TodoItem: React.FC<TodoItemProps > = ({ todo, onClick }) => {
                     day: '2-digit',
                   })}</span>
         </div>
-        <Card.Body>
+        <Card.Body  onClick={onClick}>
           <Card.Title as = "p">{todo.title}</Card.Title>
           <Card.Text>{todo.description}</Card.Text>
         </Card.Body>
       </Card>
   ) 
 }
-
-
 export default TodoItem;
