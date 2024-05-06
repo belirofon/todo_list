@@ -16,6 +16,11 @@ const App: React.FC = () => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   const [todoId, setTodoId] = useState<string | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<string>('name'); // Текущая активная вкладка
+
+   // Функция для обработки смены активной вкладки
+   const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+  };
   const handleSaveTodo = (newTodo: Todo) => {
     const existingTodoIndex = todoList.findIndex((todo) => todo.id === newTodo.id);
   
@@ -53,22 +58,20 @@ const App: React.FC = () => {
       setTodoList(JSON.parse(storedTodoList));
     }
   }, []);
-  // Функция для обработки смены активной вкладки
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-  };
+ 
 
   // Функция для получения правильной сортировки в зависимости от выбранной вкладки
-  const getSortedTodoList = () => {
-    switch (activeTab) {
-      case 'name':
-        return [...todoList].sort((a, b) => a.title.localeCompare(b.title));
-      case 'createdAt':
-        return [...todoList].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-      case 'updatedAt':
-        return [...todoList].sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
-      default:
-        return todoList;
+  const getSortedTodoList: () => Todo[] = () => {
+    if (activeTab === 'name') {
+      return [...todoList].sort((a, b) => a.title.localeCompare(b.title));
+    } else if (activeTab === 'createdAt') {
+      console.log([...todoList].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()))
+      return [...todoList].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    } else if (activeTab === 'updatedAt') {
+      console.log([...todoList].sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()))
+      return [...todoList].sort((a, b) => new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime());
+    } else {
+      return todoList;
     }
   };
   return (
@@ -103,22 +106,10 @@ const App: React.FC = () => {
                    </TodoList>
                 </Tab>
             </Tabs>
-        {/* <TabsTodoLinks todoList={[]} handleSortChange={function (sortType: string): void {
-              throw new Error('Function not implemented.');
-            } } />
-            
-          {
-                  todoList.map((item) => 
-                      <TodoItem todo={item} key={item.id} onClick={() => getItemId(item.id)} handleDelete={() => handleDelete(item.id)}/>
-                  )
-          } */}
-       
-
         <AddTodoModal show={showModal} onClose={toggleModal} onSave={handleSaveTodo} id={todoId}/>
        </>
       }/>
            
-            
     </div>
   );
 };
