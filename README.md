@@ -2,12 +2,12 @@
 
 Этот проект представляет собой приложение для создания, редактирования и удаления заметок на виртуальном холодильнике.
 
-"scripts": {
+`"scripts": {
   "dev": "vite",
   "build": "tsc && vite build",
   "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
   "preview": "vite preview"
-}
+}`
 
 
 
